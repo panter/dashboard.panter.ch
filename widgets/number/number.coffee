@@ -13,7 +13,7 @@ class Dashing.Number extends Dashing.Widget
 
   @accessor 'arrow', ->
     if @get('last')
-      if parseFloat(@get('current')) > parseFloat(@get('last')) then 'icon-arrow-up' else 'icon-arrow-down'
+      if parseFloat(@get('current')) >= parseFloat(@get('last')) then 'icon-arrow-up' else 'icon-arrow-down'
 
   onData: (data) ->
     if data.status
