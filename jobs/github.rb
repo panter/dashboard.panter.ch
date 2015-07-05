@@ -17,5 +17,10 @@ SCHEDULER.every '10m' do
     .flat_map(&:commits)
     .length
 
+  pull_request_comments = events
+    .select { |event| event.type == 'PullRequestReviewCommentEvent' }
+    .length
+
   send_event('commits', { current: commits })
+  send_event('pull-request-comments', { current: pull_request_comments })
 end
