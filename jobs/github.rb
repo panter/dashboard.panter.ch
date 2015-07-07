@@ -1,13 +1,15 @@
 require 'octokit'
 
-client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
+def update
+  client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
 
-SCHEDULER.every '10m' do
   events = client.organization_events('panter')
 
   # get all today's events
+  last_response = client.last_response
   while events.last.created_at.to_date == Date.today
-    events << client.organization_events('panter')
+    last_response = last_response.rels[:next].get
+    events += last_response.data
   end
   events.select! { |event| event.created_at.to_date == Date.today }
 
@@ -23,4 +25,10 @@ SCHEDULER.every '10m' do
 
   send_event('commits', { current: commits })
   send_event('pull-request-comments', { current: pull_request_comments })
+end
+
+update
+
+SCHEDULER.every '1m' do
+  update
 end
