@@ -32,7 +32,6 @@ def update
   current_performance = performance(Date.today.prev_month.month)
 
   send_event('salary-performance', { current: current_performance, last: last_performance })
-  send_event('code-coverage',   { value: 97.8 })
 end
 
 update
