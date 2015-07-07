@@ -28,14 +28,15 @@ def update
   send_event('employees', { current: employees })
   send_event('contractors', { current: contractors })
 
-  last_performance = performance(5)
-  current_performance = performance(6)
+  last_performance = performance(Date.today.prev_month.prev_month.month)
+  current_performance = performance(Date.today.prev_month.month)
 
   send_event('salary-performance', { current: current_performance, last: last_performance })
   send_event('code-coverage',   { value: 97.8 })
 end
 
 update
+
 SCHEDULER.every '1d' do
   update
 end
