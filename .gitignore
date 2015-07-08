@@ -1,2 +1,5 @@
 *DS_STORE
 history.yml
+
+# dotenv
+.env
