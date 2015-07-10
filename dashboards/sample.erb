@@ -1,30 +1,34 @@
 <% content_for :title do %>Panter AG<% end %>
+<header>panter B dashhboard</header>
 <div class="gridster">
   <ul>
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="welcome" data-view="Text" data-title="Hello" data-text="This is your shiny new dashboard." data-moreinfo="Protip: You can drag the widgets around!"></div>
+
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div class="salary" data-id="salary-performance" data-view="Number" data-title="last month's performance" data-moreinfo="Factor of billable work in <%= Date.today.prev_month.strftime('%B') %>"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="salary-performance" data-view="Number" data-title="Last month's performance" data-moreinfo="Factor of billable work in <%= Date.today.prev_month.strftime('%B') %>"></div>
+    <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="employees" data-view="Number" data-title="employees"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="employees" data-view="Number" data-title="Employees"></div>
+    <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="contractors" data-view="Number" data-title="contractors"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="contractors" data-view="Number" data-title="Contractors"></div>
+    <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="commits" data-view="Number" data-title="commits today"></div>
     </li>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="commits" data-view="Number" data-title="Commits today"></div>
-    </li>
-
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+    <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div data-id="pull-request-comments" data-view="Number" data-title="Code review comments" data-moreinfo="Number of comments on pull requests"></div>
     </li>
 
   </ul>
-  <center><div style="font-size: 12px">Try this: curl -d '{ "auth_token": "YOUR_AUTH_TOKEN", "text": "Hey, Look what I can do!" }' \http://<%=request.host%>:<%=request.port%>/widgets/welcome</div></center>
+  <center>
+    <div>
+      <span class="salary">salary figures</span>
+      <span class="staff">staff figures</span>
+      <span class="coding">coding figures</span>
+    </div>
+  </center>
 </div>
