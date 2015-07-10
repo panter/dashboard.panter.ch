@@ -1,20 +1,21 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #ec663c;
-
-$title-color:       rgba(255, 255, 255, 0.7);
-$moreinfo-color:    rgba(255, 255, 255, 0.7);
+@import 'variables';
 
 // ----------------------------------------------------------------------------
-// Widget-text styles
+// Widget-number styles
 // ----------------------------------------------------------------------------
-.widget-text {
+.widget-number {
 
-  background-color: $background-color;
+  .value {
+    color: $value-color;
+  }
 
-  .title {
-    color: $title-color;
+  .change-rate {
+    font-weight: 500;
+    font-size: 30px;
+    color: $value-color;
   }
 
   .more-info {
@@ -22,11 +23,6 @@ $moreinfo-color:    rgba(255, 255, 255, 0.7);
   }
 
   .updated-at {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-
-  &.large h3 {
-    font-size: 65px;
+    color: rgba(0, 0, 0, 0.3);
   }
 }
