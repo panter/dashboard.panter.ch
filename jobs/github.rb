@@ -7,7 +7,7 @@ def update
 
   # get all today's events
   last_response = client.last_response
-  while events.last.created_at.to_date == Date.today
+  while events.last.created_at.to_date == Date.today && last_response.rels[:next]
     last_response = last_response.rels[:next].get
     events += last_response.data
   end
@@ -17,6 +17,8 @@ def update
     .select { |event| event.type == 'PushEvent' }
     .map(&:payload)
     .flat_map(&:commits)
+    .map(&:sha)
+    .uniq
     .length
 
   pull_request_comments = events
