@@ -17,6 +17,8 @@ def update
     .select { |event| event.type == 'PushEvent' }
     .map(&:payload)
     .flat_map(&:commits)
+    .map(&:sha)
+    .uniq
     .length
 
   pull_request_comments = events
