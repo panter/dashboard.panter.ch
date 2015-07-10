@@ -1,0 +1,8 @@
+@import 'variables';
+
+.title {
+  color: $title-color;
+  position: absolute;
+  top: $space;
+  width: 100%;
+}
