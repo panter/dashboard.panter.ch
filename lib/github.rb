@@ -37,4 +37,34 @@ class Github
       .select { |event| event.type == 'PullRequestReviewCommentEvent' }
       .length
   end
+
+  # all public or private repositories, excluding forks
+  def own_repositories
+    @own_repositories ||=
+      begin
+        @own_repositories = client.organization_repositories('panter', type: [:public, :private])
+        last_response = client.last_response
+        while last_response.rels[:next]
+          last_response = last_response.rels[:next].get
+          @own_repositories += last_response.data
+        end
+        @own_repositories
+      end
+  end
+
+  def code_frequency_stats
+    @code_frequency_stats ||=
+      begin
+        statistics = own_repositories.map(&:full_name).map do |repo_name|
+          client.code_frequency_stats(repo_name)
+        end
+          .compact
+          .map(&:last) # the last entry is the current week
+
+        additions = statistics.map { |statistic| statistic[-2] }.inject(:+)
+        deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
+
+        { additions: additions, deletions: deletions }
+      end
+  end
 end
