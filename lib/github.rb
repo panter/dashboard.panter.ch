@@ -56,13 +56,10 @@ class Github
     @code_frequency_stats ||=
       begin
         statistics = own_repositories.map(&:full_name).map do |repo_name|
-          stats = client.code_frequency_stats(repo_name)
-          if stats
-            stats.last
-          end
+          client.code_frequency_stats(repo_name)
         end
           .compact
-          .reject { |statistic| statistic[-2] == 0 && statistic[-1] == 0 }
+          .map(&:last) # the last entry is the current week
 
         additions = statistics.map { |statistic| statistic[-2] }.inject(:+)
         deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
