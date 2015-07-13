@@ -7,6 +7,7 @@ class Github
     @client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
   end
 
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Events#organization_events-instance_method
   def events
     @events ||=
       begin
@@ -22,6 +23,8 @@ class Github
       end
   end
 
+  # @return [Fixnum] the number of commits
+  # @see {#events} for the range of events that are considered.
   def commits
     events
       .select { |event| event.type == 'PushEvent' }
@@ -32,6 +35,7 @@ class Github
       .length
   end
 
+  # @return [Fixnum] the number of pull request comments
   def pull_request_comments
     events
       .select { |event| event.type == 'PullRequestReviewCommentEvent' }
@@ -39,6 +43,8 @@ class Github
   end
 
   # all public or private repositories, excluding forks
+  #
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
   def own_repositories
     @own_repositories ||=
       begin
@@ -52,6 +58,8 @@ class Github
       end
   end
 
+  # @return [Hash{Symbol=>Fixnum}] the number of line additions
+  #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
   def code_frequency_stats
     @code_frequency_stats ||=
       begin
