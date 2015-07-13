@@ -67,4 +67,28 @@ class Github
         { additions: additions, deletions: deletions }
       end
   end
+
+  # @return [Hash{Symbol=>Float}] the languages with the overall percentage
+  #   as value and the language name as key.
+  def languages
+    @languages ||=
+      begin
+        languages = own_repositories.map(&:full_name).map do |repo_name|
+          client.languages(repo_name)
+        end.reject { |resource| resource.attrs.empty? }
+
+        # collapse all the hashes into one, sum up the values
+        grouped = Hash.new(0)
+        languages.each do |language_hash|
+          language_hash.each { |language| grouped[language.first] += language.last }
+        end
+
+        percent_factor = 100 / grouped.values.inject(&:+).to_f
+
+        # convert to percent and sort
+        grouped = grouped.map do |language|
+          [language.first, (percent_factor * language.last).round(2)]
+        end.sort_by(&:last).reverse.to_h
+      end
+  end
 end
