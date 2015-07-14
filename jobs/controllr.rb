@@ -13,6 +13,10 @@ def update
   current_performance = controllr.performance(Date.today.prev_month.month)
 
   send_event('salary-performance', { current: current_performance, last: last_performance })
+
+  # working hours
+  hours_worked = controllr.hours_worked(Date.today.month)
+  send_event('hours-worked', { current: hours_worked })
 end
 
 update
