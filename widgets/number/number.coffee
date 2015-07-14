@@ -10,7 +10,7 @@ class Dashing.Number extends Dashing.Widget
         if diff > 0
           "+#{diff}%"
         else
-          "#{diff}"
+          "#{diff}%"
     else
       ""
 
