@@ -6,6 +6,8 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
+@import 'variables';
+
 $background-color: #222;
 $text-color: #fff;
 
@@ -94,18 +96,15 @@ h1, h2, h3, h4, h5, p {
 h1 {
   margin-bottom: 12px;
   text-align: center;
-  font-size: 30px;
-  font-weight: 400;
+  font-size: 20px;
 }
 h2 {
   text-transform: uppercase;
-  font-size: 76px;
-  font-weight: 700;
+  font-size: 60px;
   color: $text-color;
 }
 h3 {
   font-size: 25px;
-  font-weight: 600;
   color: $text-color;
 }
 
@@ -143,7 +142,7 @@ h3 {
 }
 
 .widget {
-  padding: 25px 0;
+  padding: 25px 12px;
   text-align: center;
   width: 100%;
   display: table-cell;
@@ -177,8 +176,13 @@ h3 {
   }
 }
 
+.title {
+  color: $title-color;
+}
+
 .more-info {
-  font-size: 15px;
+  font-size: 20px;
+  color: $moreinfo-color;
   position: absolute;
   bottom: 32px;
   left: 0;
@@ -187,6 +191,7 @@ h3 {
 
 .updated-at {
   font-size: 15px;
+  color: $updated-at-color;
   position: absolute;
   bottom: 12px;
   left: 0;
