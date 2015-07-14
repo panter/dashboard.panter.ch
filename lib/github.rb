@@ -7,6 +7,7 @@ class Github
     @client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
   end
 
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Events#organization_events-instance_method
   def events
     @events ||=
       begin
@@ -22,6 +23,8 @@ class Github
       end
   end
 
+  # @return [Fixnum] the number of commits
+  # @see {#events} for the range of events that are considered.
   def commits
     events
       .select { |event| event.type == 'PushEvent' }
@@ -32,6 +35,7 @@ class Github
       .length
   end
 
+  # @return [Fixnum] the number of pull request comments
   def pull_request_comments
     events
       .select { |event| event.type == 'PullRequestReviewCommentEvent' }
@@ -39,6 +43,8 @@ class Github
   end
 
   # all public or private repositories, excluding forks
+  #
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
   def own_repositories
     @own_repositories ||=
       begin
@@ -52,6 +58,8 @@ class Github
       end
   end
 
+  # @return [Hash{Symbol=>Fixnum}] the number of line additions
+  #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
   def code_frequency_stats
     @code_frequency_stats ||=
       begin
@@ -65,6 +73,30 @@ class Github
         deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
 
         { additions: additions, deletions: deletions }
+      end
+  end
+
+  # @return [Hash{Symbol=>Float}] the languages with the overall percentage
+  #   as value and the language name as key.
+  def languages
+    @languages ||=
+      begin
+        languages = own_repositories.map(&:full_name).map do |repo_name|
+          client.languages(repo_name)
+        end.reject { |resource| resource.attrs.empty? }
+
+        # collapse all the hashes into one, sum up the values
+        grouped = Hash.new(0)
+        languages.each do |language_hash|
+          language_hash.each { |language| grouped[language.first] += language.last }
+        end
+
+        percent_factor = 100 / grouped.values.inject(&:+).to_f
+
+        # convert to percent and sort
+        grouped = grouped.map do |language|
+          [language.first, (percent_factor * language.last).round(2)]
+        end.sort_by(&:last).reverse.to_h
       end
   end
 end
