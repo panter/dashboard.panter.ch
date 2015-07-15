@@ -18,10 +18,15 @@ class Controllr
   def performance(month)
     data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}")
     data_totals = data['totals']
-
     performance = data_totals['internal_hours_billable'].to_f / data_totals['internal_hours_worked'].to_f
 
     performance.round(2)
+  end
+
+  def hours_worked(month)
+    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}")
+    data_totals = data['totals']
+    data_totals['internal_hours_worked'].to_i
   end
 
   private
