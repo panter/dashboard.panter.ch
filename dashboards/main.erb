@@ -1,9 +1,9 @@
 <% content_for :title do %>Panter AG Dashboard<% end %>
-<header>panter B dashhboard</header>
+<header>panter B dashboard</header>
 <div class="gridster">
   <ul>
 
-    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div class="salary" data-id="salary-performance" data-view="Number" data-title="last month's performance" data-moreinfo="Factor of billable work in <%= Date.today.prev_month.strftime('%B') %>"></div>
     </li>
 
@@ -24,7 +24,7 @@
     </li>
 
     <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="additions-deletions" data-view="Number2" data-title="+/- lines this week" data-moreinfo="number of added and removed lines" data-prefix1="+" data-prefix2="-"></div>
+      <div data-id="additions-deletions" data-view="Number2" data-title="added/deleted lines this week" data-moreinfo="number of added and removed lines" data-prefix1="+" data-prefix2="-"></div>
     </li>
 
     <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
@@ -32,11 +32,10 @@
     </li>
 
   </ul>
-  <center>
-    <div>
-      <span class="salary">salary figures</span>
-      <span class="staff">staff figures</span>
-      <span class="coding">coding figures</span>
-    </div>
-  </center>
 </div>
+
+<footer>
+  <span class="salary">salary figures</span>
+  <span class="staff">staff figures</span>
+  <span class="coding">coding figures</span>
+</footer>

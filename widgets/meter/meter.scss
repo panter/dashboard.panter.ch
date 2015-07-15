@@ -1,10 +1,9 @@
 // ----------------------------------------------------------------------------
 // Sass declarations
 // ----------------------------------------------------------------------------
-$background-color:  #9c4274;
+@import 'variables';
 
-$title-color:       rgba(255, 255, 255, 0.7);
-$moreinfo-color:    rgba(255, 255, 255, 0.3);
+$background-color:  #9c4274;
 
 $meter-background:  darken($background-color, 15%);
 
@@ -29,7 +28,7 @@ $meter-background:  darken($background-color, 15%);
   }
 
   .updated-at {
-    color: rgba(0, 0, 0, 0.3);
+    color: $updated-at-color;
   }
 
 }

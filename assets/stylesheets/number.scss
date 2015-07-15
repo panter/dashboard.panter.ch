@@ -13,9 +13,9 @@
   }
 
   .change-rate {
-    font-weight: 500;
     font-size: 30px;
     color: $value-color;
+    font-weight: bold;
   }
 
   .more-info {
@@ -23,6 +23,6 @@
   }
 
   .updated-at {
-    color: rgba(0, 0, 0, 0.3);
+    color: $updated-at-color;
   }
 }
