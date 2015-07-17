@@ -4,7 +4,7 @@ class Github
   attr_reader :client
 
   def initialize
-    @client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
+    @client = Octokit::Client.new(:login => ENV['GITHUB_USER'], :access_token => ENV['GITHUB_TOKEN'])
   end
 
   # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Events#organization_events-instance_method
