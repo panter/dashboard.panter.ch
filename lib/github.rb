@@ -4,22 +4,22 @@ class Github
   attr_reader :client
 
   def initialize
-    @client = Octokit::Client.new(:login => ENV['GITHUB_LOGIN'], :password => ENV['GITHUB_PASSWORD'])
+    @client = Octokit::Client.new(:login => ENV['GITHUB_USER'], :access_token => ENV['GITHUB_TOKEN'])
   end
 
   # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Events#organization_events-instance_method
   def events
     @events ||=
       begin
-        @events = client.organization_events('panter')
+        events = client.organization_events('panter')
 
         # get all today's events
         last_response = client.last_response
-        while @events.last.created_at.to_date == Date.today && last_response.rels[:next]
+        while events.last.created_at.to_date == Date.today && last_response.rels[:next]
           last_response = last_response.rels[:next].get
-          @events += last_response.data
+          events += last_response.data
         end
-        @events.select! { |event| event.created_at.to_date == Date.today }
+        events.select { |event| event.created_at.to_date == Date.today }
       end
   end
 
@@ -48,13 +48,13 @@ class Github
   def own_repositories
     @own_repositories ||=
       begin
-        @own_repositories = client.organization_repositories('panter', type: [:public, :private])
+        own_repositories = client.organization_repositories('panter', type: [:public, :private])
         last_response = client.last_response
         while last_response.rels[:next]
           last_response = last_response.rels[:next].get
-          @own_repositories += last_response.data
+          own_repositories += last_response.data
         end
-        @own_repositories
+        own_repositories
       end
   end
 
