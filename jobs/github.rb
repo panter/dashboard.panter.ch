@@ -15,6 +15,6 @@ end
 
 update
 
-SCHEDULER.every '1m' do
+SCHEDULER.every '10m' do
   update
 end
