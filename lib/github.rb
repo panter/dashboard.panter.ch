@@ -1,6 +1,11 @@
 require 'octokit'
 
 class Github
+  # we exclude projects that contain too much vendor
+  # stuff. this distorts our statistics. E.g. wordpress
+  # repositories.
+  REPOSITORY_BLACKLIST = (ENV['GITHUB_REPO_BLACKLIST'] || '').split(',')
+
   attr_reader :client
 
   def initialize
@@ -54,7 +59,8 @@ class Github
           last_response = last_response.rels[:next].get
           repositories += last_response.data
         end
-        repositories
+
+        repositories.reject { |repository| REPOSITORY_BLACKLIST.include?(repository.full_name) }
       end
   end
 
