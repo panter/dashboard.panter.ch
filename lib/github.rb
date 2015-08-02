@@ -67,8 +67,8 @@ class Github
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
   #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
-  def code_frequency_stats
-    @code_frequency_stats ||=
+  def line_changes
+    @line_changes ||=
       begin
         statistics = repositories.map(&:full_name).map do |repo_name|
           client.code_frequency_stats(repo_name)
