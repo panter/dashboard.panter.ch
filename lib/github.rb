@@ -42,20 +42,27 @@ class Github
       .length
   end
 
-  # all public or private repositories, excluding forks
+  # all repositories
   #
   # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
-  def own_repositories
-    @own_repositories ||=
+  def repositories
+    @repositories ||=
       begin
-        own_repositories = client.organization_repositories('panter', type: [:public, :private])
+        repositories = client.organization_repositories('panter')
         last_response = client.last_response
         while last_response.rels[:next]
           last_response = last_response.rels[:next].get
-          own_repositories += last_response.data
+          repositories += last_response.data
         end
-        own_repositories
+        repositories
       end
+  end
+
+  # all owned repositories (i.e. excluding forks)
+  #
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
+  def own_repositories
+    @own_repositories ||= repositories.reject(&:fork)
   end
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
