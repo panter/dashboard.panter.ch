@@ -70,7 +70,7 @@ class Github
   def code_frequency_stats
     @code_frequency_stats ||=
       begin
-        statistics = own_repositories.map(&:full_name).map do |repo_name|
+        statistics = repositories.map(&:full_name).map do |repo_name|
           client.code_frequency_stats(repo_name)
         end
           .compact
