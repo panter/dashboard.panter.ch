@@ -1,6 +1,11 @@
 require 'octokit'
 
 class Github
+  # we exclude projects that contain too much vendor
+  # stuff. this distorts our statistics. E.g. wordpress
+  # repositories.
+  REPOSITORY_BLACKLIST = (ENV['GITHUB_REPO_BLACKLIST'] || '').split(',')
+
   attr_reader :client
 
   def initialize
@@ -42,28 +47,36 @@ class Github
       .length
   end
 
-  # all public or private repositories, excluding forks
+  # all repositories
   #
   # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
-  def own_repositories
-    @own_repositories ||=
+  def repositories
+    @repositories ||=
       begin
-        own_repositories = client.organization_repositories('panter', type: [:public, :private])
+        repositories = client.organization_repositories('panter')
         last_response = client.last_response
         while last_response.rels[:next]
           last_response = last_response.rels[:next].get
-          own_repositories += last_response.data
+          repositories += last_response.data
         end
-        own_repositories
+
+        repositories.reject { |repository| REPOSITORY_BLACKLIST.include?(repository.full_name) }
       end
+  end
+
+  # all owned repositories (i.e. excluding forks)
+  #
+  # @return http://www.rubydoc.info/github/pengwynn/octokit/Octokit/Client/Organizations#organization_repositories-instance_method
+  def own_repositories
+    @own_repositories ||= repositories.reject(&:fork)
   end
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
   #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
-  def code_frequency_stats
-    @code_frequency_stats ||=
+  def line_changes
+    @line_changes ||=
       begin
-        statistics = own_repositories.map(&:full_name).map do |repo_name|
+        statistics = repositories.map(&:full_name).map do |repo_name|
           client.code_frequency_stats(repo_name)
         end
           .compact
