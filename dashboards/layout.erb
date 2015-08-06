@@ -19,7 +19,14 @@
     <div id="container">
       <%= yield %>
     </div>
-  
+
+    <footer>
+      <a href="main"><span class="">all figures</span></a>
+      <a href="salary"><span class="salary">salary figures</span></a>
+      <a href="staff"><span class="staff">staff figures</span></a>
+      <a href="coding"><span class="coding">coding figures</span></a>
+    </footer>
+
     <% if development? %>
       <div id="saving-instructions">
         <p>Paste the following at the top of <i><%= params[:dashboard] %>.erb</i></p>
