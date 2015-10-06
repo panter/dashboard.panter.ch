@@ -4,7 +4,7 @@
   <ul>
 
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div class="salary" data-id="salary-performance" data-view="Number" data-title="last month's performance" data-moreinfo="Factor of billable work in <%= Date.today.prev_month.strftime('%B') %>"></div>
+      <div class="salary" data-id="salary-performance" data-view="Number" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s performance" data-moreinfo="Factor of billable work"></div>
     </li>
 
     <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
