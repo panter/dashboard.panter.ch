@@ -2,10 +2,11 @@ require 'octokit'
 
 def update
   github = Github.new
+  gitlab = GitlabClient.new
 
-  send_event('commits', { current: github.commits })
+  send_event('commits', { current: github.commits_count + gitlab.commits_count })
 
-  send_event('pull-request-comments', { current: github.pull_request_comments })
+  send_event('pull-request-comments', { current: github.pull_request_comments_count })
 
   send_event('additions-deletions', {
     value1: github.line_changes[:additions],

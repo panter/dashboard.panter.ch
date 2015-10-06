@@ -8,6 +8,7 @@ gem 'capistrano-rbenv'
 gem 'capistrano-rbenv-install'
 gem 'dotenv'
 gem 'dotenv-deployment'
+gem 'gitlab'
 gem 'octokit'
 gem 'unicorn'
 

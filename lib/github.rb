@@ -30,7 +30,7 @@ class Github
 
   # @return [Fixnum] the number of commits
   # @see {#events} for the range of events that are considered.
-  def commits
+  def commits_count
     events
       .select { |event| event.type == 'PushEvent' }
       .map(&:payload)
@@ -41,7 +41,7 @@ class Github
   end
 
   # @return [Fixnum] the number of pull request comments
-  def pull_request_comments
+  def pull_request_comments_count
     events
       .select { |event| event.type == 'PullRequestReviewCommentEvent' }
       .length
