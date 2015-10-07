@@ -20,12 +20,12 @@ class GitlabClient
     projects.select { |project| Date.parse(project.last_activity_at) == Date.today }
   end
 
-  def commits
-    @commits ||=
+  def commits_per_project
+    @commits_per_project ||=
       begin
-        commits = []
+        commits = {}
         projects_active_today.each do |project|
-          commits += paginate(
+          commits[project.id] = paginate(
             :commits,
             args: [project.id],
             select_condition: -> (page) { Date.parse(page.created_at) == Date.today }
@@ -33,6 +33,34 @@ class GitlabClient
         end
 
         commits
+      end
+  end
+
+  def commits
+    commits_per_project.values.inject(&:+)
+  end
+
+  # @return [Hash{Symbol=>Fixnum}] the number of line additions
+  #   and deletions in the form `{additions: <Fixnum>, deletions: <Fixnum>}`
+  def line_changes
+    @line_changes ||=
+      begin
+        line_changes = { additions: 0, deletions: 0 }
+
+        commits_per_project.each do |project, commits|
+          commits.each do |commit|
+            Gitlab.commit_diff(project, commit.id).each do |diff|
+              change = diff.diff[/@@ (.+) @@/, 1]
+              # diff may not contain line changes (e.g. file rename)
+              if change
+                line_changes[:deletions] += change[/-\d+,(\d+)/, 1].to_i
+                line_changes[:additions] += change[/\+\d+,(\d+)/, 1].to_i
+              end
+            end
+          end
+        end
+
+        line_changes
       end
   end
 

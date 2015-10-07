@@ -72,7 +72,7 @@ class Github
   end
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
-  #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
+  #   and deletions in the form `{additions: <Fixnum>, deletions: <Fixnum>}`
   def line_changes
     @line_changes ||=
       begin
@@ -85,7 +85,7 @@ class Github
         additions = statistics.map { |statistic| statistic[-2] }.inject(:+)
         deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
 
-        { additions: additions, deletions: deletions }
+        { additions: additions, deletions: deletions.abs }
       end
   end
 

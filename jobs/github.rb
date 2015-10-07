@@ -9,8 +9,8 @@ def update
   send_event('pull-request-comments', { current: github.pull_request_comments_count })
 
   send_event('additions-deletions', {
-    value1: github.line_changes[:additions],
-    value2: github.line_changes[:deletions].abs
+    value1: github.line_changes[:additions] + gitlab.line_changes[:additions],
+    value2: github.line_changes[:deletions] + gitlab.line_changes[:deletions]
   })
 
   languages = github.languages.map do |language|
