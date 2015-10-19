@@ -138,6 +138,9 @@ class GitlabClient
 
     # 2) although 1) has cancelled any more fetching of pages, we still
     # need to filter out the unmatched entries
-    select_condition ? results.select(&select_condition) : results
+    results = select_condition ? results.select(&select_condition) : results
+
+    # sometimes page 0 and 1 contain the same entries
+    results.uniq(&:id)
   end
 end
