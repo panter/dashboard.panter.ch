@@ -1,5 +1,15 @@
 require 'gitlab'
 
+# Monkeypatch the gitlab gem to add support for the endpoint
+# http://doc.gitlab.com/ce/api/notes.html#list-all-merge-request-notes
+class Gitlab::Client
+  module Notes
+    def merge_request_notes(project, merge_request, options={})
+      get("/projects/#{project}/merge_requests/#{merge_request}/notes", :query => options)
+    end
+  end
+end
+
 class GitlabClient
   def initialize
     Gitlab.endpoint = 'https://git.panter.ch/api/v3'
@@ -67,6 +77,44 @@ class GitlabClient
   # @return [Fixnum] the number of today's commits
   def commits_count
     commits.length
+  end
+
+  # @return [Gitlab::ObjectifiedHash] Today's comments on pull requests.
+  # We use the merge request *notes* endpoint
+  # (http://doc.gitlab.com/ce/api/notes.html#list-all-merge-request-notes)
+  # instead of the merge request *comments* endpoint, as the latter doesn't
+  # contain any dates in the response.
+  def pull_request_comments
+    @pull_request_comments ||=
+      begin
+        comments = []
+        projects.each do |project|
+          merge_requests = paginate(
+            :merge_requests,
+            args: [project.id],
+            options: { order_by: :updated_at },
+            select_condition: -> (merge_request) { Date.parse(merge_request.updated_at) == Date.today }
+          )
+
+          merge_requests.each do |merge_request|
+            comments += paginate(
+              :merge_request_notes,
+              args: [project.id, merge_request.id],
+              select_condition: -> (comment) {
+                !comment.system &&
+                Date.parse(comment.created_at) == Date.today
+              }
+            )
+          end
+        end
+
+        comments
+      end
+  end
+
+  # @return [Fixnum] the number of today's pull request comments
+  def pull_request_comments_count
+    pull_request_comments.length
   end
 
   private
