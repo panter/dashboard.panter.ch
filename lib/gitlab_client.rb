@@ -12,7 +12,7 @@ end
 
 class GitlabClient
   def initialize
-    Gitlab.endpoint = 'https://git.panter.ch/api/v3'
+    Gitlab.endpoint = ENV['GITLAB_URL']
     Gitlab.private_token = ENV['GITLAB_PRIVATE_TOKEN']
   end
 
