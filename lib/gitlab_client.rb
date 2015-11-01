@@ -47,7 +47,7 @@ class GitlabClient
   end
 
   def commits
-    commits_per_project.values.inject(&:+)
+    commits_per_project.values.inject(&:+) || []
   end
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
