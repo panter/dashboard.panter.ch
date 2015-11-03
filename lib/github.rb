@@ -30,7 +30,7 @@ class Github
 
   # @return [Fixnum] the number of commits
   # @see {#events} for the range of events that are considered.
-  def commits
+  def commits_count
     events
       .select { |event| event.type == 'PushEvent' }
       .map(&:payload)
@@ -41,7 +41,7 @@ class Github
   end
 
   # @return [Fixnum] the number of pull request comments
-  def pull_request_comments
+  def pull_request_comments_count
     events
       .select { |event| event.type == 'PullRequestReviewCommentEvent' }
       .length
@@ -72,7 +72,7 @@ class Github
   end
 
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
-  #   and deletions in the form `{ additions: <Fixnum>, deletions: <Fixnum>}`
+  #   and deletions in the form `{additions: <Fixnum>, deletions: <Fixnum>}`
   def line_changes
     @line_changes ||=
       begin
@@ -85,7 +85,7 @@ class Github
         additions = statistics.map { |statistic| statistic[-2] }.inject(:+)
         deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
 
-        { additions: additions, deletions: deletions }
+        { additions: additions, deletions: deletions.abs }
       end
   end
 
