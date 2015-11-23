@@ -28,13 +28,25 @@ class Github
       end
   end
 
+  def commits_per_project
+    commits_per_project = Hash.new { |hash, key| hash[key] = [] }
+
+    events.select { |event| event.type == 'PushEvent' }.each do |push_event|
+      repo = push_event.repo.name
+      commits_per_project[repo] += push_event.payload.commits
+    end
+
+    commits_per_project
+  end
+
+  def commits
+    commits_per_project.values.inject(&:+) || []
+  end
+
   # @return [Fixnum] the number of commits
   # @see {#events} for the range of events that are considered.
   def commits_count
-    events
-      .select { |event| event.type == 'PushEvent' }
-      .map(&:payload)
-      .flat_map(&:commits)
+    commits
       .map(&:sha)
       .uniq
       .length
@@ -76,16 +88,17 @@ class Github
   def line_changes
     @line_changes ||=
       begin
-        statistics = repositories.map(&:full_name).map do |repo_name|
-          client.code_frequency_stats(repo_name)
+        line_changes = { additions: 0, deletions: 0 }
+
+        commits_per_project.each do |project, commits|
+          commits.each do |commit|
+            full_commit = client.commit(project, commit.sha)
+            line_changes[:deletions] += full_commit.stats[:deletions]
+            line_changes[:additions] += full_commit.stats[:additions]
+          end
         end
-          .compact
-          .map(&:last) # the last entry is the current week
 
-        additions = statistics.map { |statistic| statistic[-2] }.inject(:+)
-        deletions = statistics.map { |statistic| statistic[-1] }.inject(:+)
-
-        { additions: additions, deletions: deletions.abs }
+        line_changes
       end
   end
 
