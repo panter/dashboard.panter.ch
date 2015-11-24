@@ -22,7 +22,9 @@ class GitlabClient
         projects = paginate(:projects, options: { scope: :all })
 
         # exclude projects without proper repositories
-        projects.select{ |project| project.default_branch }
+        projects
+          .select { |project| project.namespace.name == 'panter' }
+          .select { |project| project.default_branch }
       end
   end
 
@@ -50,6 +52,11 @@ class GitlabClient
     commits_per_project.values.inject(&:+) || []
   end
 
+  # @return [Fixnum] the number of today's commits
+  def commits_count
+    commits.length
+  end
+
   # @return [Hash{Symbol=>Fixnum}] the number of line additions
   #   and deletions in the form `{additions: <Fixnum>, deletions: <Fixnum>}`
   def line_changes
@@ -72,11 +79,6 @@ class GitlabClient
 
         line_changes
       end
-  end
-
-  # @return [Fixnum] the number of today's commits
-  def commits_count
-    commits.length
   end
 
   # @return [Gitlab::ObjectifiedHash] Today's comments on pull requests.
