@@ -1,4 +1,5 @@
 require 'gitlab'
+require './lib/frameworks'
 
 # Monkeypatch the gitlab gem to add support for the endpoint
 # http://doc.gitlab.com/ce/api/notes.html#list-all-merge-request-notes
@@ -117,6 +118,10 @@ class GitlabClient
   # @return [Fixnum] the number of today's pull request comments
   def pull_request_comments_count
     pull_request_comments.length
+  end
+
+  def frameworks
+    @frameworks ||= Frameworks.new(projects.map(&:name)).as_percentages
   end
 
   private

@@ -10,6 +10,7 @@ gem 'dotenv'
 gem 'dotenv-deployment'
 gem 'gitlab'
 gem 'octokit'
+gem 'technologist'
 gem 'unicorn'
 
 group :production do
