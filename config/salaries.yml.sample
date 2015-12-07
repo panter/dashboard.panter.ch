@@ -1,0 +1,15 @@
+# This is a temporary data source for the salaries, as currently the
+# controllr doesn't have an api to properly get the salaries per month.
+2015:
+  1: 4500.00
+  2: 4600.00
+  3: 5100.00
+  4: 4200.00
+  5: 5300.00
+  6: 5200.50
+  7: 5150.25
+  8: 4900.00
+  9: 4860.00
+  10: 4800.00
+  11: 5001.10
+  12: 5100.20

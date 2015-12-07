@@ -18,6 +18,10 @@ def update
   # working hours
   hours_worked = controllr.hours_worked(Date.today.month)
   send_event('hours-worked', { current: hours_worked })
+
+  # salaries per month
+  points = YAML.load_file('config/salaries.yml')[Date.today.year].map { |key, value| { x: key, y: value } }
+  send_event('salary-graph', points: points)
 end
 
 update

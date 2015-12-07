@@ -3,3 +3,6 @@ history.yml
 
 # dotenv
 .env
+
+# configs
+config/salaries.yml

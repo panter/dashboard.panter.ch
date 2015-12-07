@@ -3,9 +3,9 @@
 // ----------------------------------------------------------------------------
 @import 'variables';
 
-$background-color:  #dc5945;
+$background-color:  $panter-blue;
 
-$tick-color:        rgba(0, 0, 0, 0.4);
+$tick-color:        $updated-at-color;
 
 
 // ----------------------------------------------------------------------------
@@ -41,6 +41,7 @@ $tick-color:        rgba(0, 0, 0, 0.4);
   }
 
   .x_tick {
+    display: none; // we don't need to show the x-axis numbers as they don't tell anything meaningful
     position: absolute;
     bottom: 0;
     .title {
