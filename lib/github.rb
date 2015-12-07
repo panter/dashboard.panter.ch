@@ -1,4 +1,5 @@
 require 'octokit'
+require './lib/frameworks'
 
 class Github
   # we exclude projects that contain too much vendor
@@ -124,5 +125,9 @@ class Github
           [language.first, (percent_factor * language.last).round(2)]
         end.sort_by(&:last).reverse.to_h
       end
+  end
+
+  def frameworks
+    @frameworks ||= Frameworks.new(own_repositories.map(&:name)).as_percentages
   end
 end
