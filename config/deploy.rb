@@ -16,6 +16,7 @@ set :rbenv_ruby, open("#{ Bundler.root }/.ruby-version").read.strip
 set :bundle_jobs, 2
 
 set :linked_files, ['.env']
+set :linked_dirs, ['repositories']
 
 namespace :deploy do
   after :restart, :clear_cache do
