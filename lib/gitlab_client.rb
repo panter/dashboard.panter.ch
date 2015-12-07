@@ -12,6 +12,8 @@ class Gitlab::Client
 end
 
 class GitlabClient
+  ORGANIZATION_NAME = ENV['GITLAB_ORGANIZATION_NAME']
+
   def initialize
     Gitlab.endpoint = ENV['GITLAB_URL']
     Gitlab.private_token = ENV['GITLAB_PRIVATE_TOKEN']
@@ -24,7 +26,7 @@ class GitlabClient
 
         # exclude projects without proper repositories
         projects
-          .select { |project| project.namespace.name == 'panter' }
+          .select { |project| project.namespace.name == ORGANIZATION_NAME }
           .select { |project| project.default_branch }
       end
   end

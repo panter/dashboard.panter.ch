@@ -7,6 +7,8 @@ class Github
   # repositories.
   REPOSITORY_BLACKLIST = (ENV['GITHUB_REPO_BLACKLIST'] || '').split(',')
 
+  ORGANIZATION_NAME = ENV['GITHUB_ORGANIZATION_NAME']
+
   attr_reader :client
 
   def initialize
@@ -17,7 +19,7 @@ class Github
   def events
     @events ||=
       begin
-        events = client.organization_events('panter')
+        events = client.organization_events(ORGANIZATION_NAME)
 
         # get all today's events
         last_response = client.last_response
@@ -66,7 +68,7 @@ class Github
   def repositories
     @repositories ||=
       begin
-        repositories = client.organization_repositories('panter')
+        repositories = client.organization_repositories(ORGANIZATION_NAME)
         last_response = client.last_response
         while last_response.rels[:next]
           last_response = last_response.rels[:next].get
