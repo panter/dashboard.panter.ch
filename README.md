@@ -1,16 +1,21 @@
-Check out http://shopify.github.com/dashing for more information.
+# Panter Dashboard
 
-# Setup
+![Screenshot](screenshot.png)
 
-You need ruby set up on your machine. Probably using `rbenv`.
+Built with [Dashing](https://shopify.github.io/dashing/).
 
-Get libraries installed:
+## Components used
 
-    bundle
+* Redis
+* Panter Controllr
+* Github
+* Gitlab
 
-Configure access tokens by copying `.env.example` to `.env` and fill in the
-needed values.
+## Setup
 
-You're now ready to start the dashboard:
-
-    dashing start
+* Install ruby (`rbenv` recommended)
+* Install redis
+* `cp .env.example .env` and fill in some values (esp. the access tokens)
+* `cp config/salaries.yml.sample config/salaries.yml` and fill in some values
+* `bundle`
+* `dashing s`
