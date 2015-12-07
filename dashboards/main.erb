@@ -3,8 +3,8 @@
 <div class="gridster">
   <ul>
 
-    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div class="salary" data-id="salary-performance" data-view="Number" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s performance" data-moreinfo="Factor of billable work"></div>
+    <li class="salary" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="salary-performance" data-view="Number" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s performance" data-moreinfo="Factor of billable work"></div>
     </li>
 
     <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
@@ -37,6 +37,10 @@
 
     <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div data-id="frameworks" data-view="List" data-title="top frameworks" data-unordered="true"></div>
+    </li>
+
+    <li class="salary" data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="salary-graph" data-view="Graph" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s 100% salary" data-unordered="true" data-prefix="CHF "></div>
     </li>
 
   </ul>
