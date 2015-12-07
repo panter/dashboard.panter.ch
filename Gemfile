@@ -10,8 +10,10 @@ gem 'dotenv'
 gem 'dotenv-deployment'
 gem 'gitlab'
 gem 'octokit'
+gem 'redis'
 gem 'technologist'
 gem 'unicorn'
+gem 'whenever'
 
 group :production do
   gem 'therubyracer'

@@ -1,35 +1,25 @@
 def update
-  github = Github.new
-  gitlab = GitlabClient.new
+  # in development mode we don't rely on the cron jobs
+  unless production?
+    require 'rake'
+    Rake.load_rakefile('./Rakefile')
+    Rake::Task[:'data:git'].invoke
+  end
 
   # commits
-  send_event('commits', { current: github.commits_count + gitlab.commits_count })
+  send_event('commits', DataStore.get('commits'))
 
   # pr comments
-  send_event('pull-request-comments', {
-    current: github.pull_request_comments_count + gitlab.pull_request_comments_count
-  })
+  send_event('pull-request-comments', DataStore.get('pull-request-comments'))
 
   # line changes
-  send_event('additions-deletions', {
-    value1: github.line_changes[:additions] + gitlab.line_changes[:additions],
-    value2: github.line_changes[:deletions] + gitlab.line_changes[:deletions]
-  })
+  send_event('additions-deletions', DataStore.get('additions-deletions'))
 
   # languages
-  languages = github.languages.map do |language, percent|
-    { label: language, value: "#{percent}%" }
-  end.take(8)
-
-  send_event('programming-languages', items: languages)
+  send_event('programming-languages', DataStore.get('programming-languages'))
 
   # frameworks
-  frameworks = github.frameworks.merge(gitlab.frameworks) { |key, value1, value2| (value1 + value2).round }
-  frameworks = frameworks.map do |framework, percent|
-    { label: framework, value: "#{percent}%" }
-  end.take(8)
-
-  send_event('frameworks', items: frameworks)
+  send_event('frameworks', DataStore.get('frameworks'))
 end
 
 update

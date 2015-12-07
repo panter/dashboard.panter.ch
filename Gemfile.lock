@@ -16,6 +16,7 @@ GEM
     capistrano-rbenv-install (1.2.0)
       capistrano (>= 3.0)
       capistrano-rbenv (>= 2.0)
+    chronic (0.10.2)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -68,6 +69,7 @@ GEM
       rack (>= 1.0)
     raindrops (0.14.0)
     rake (10.4.2)
+    redis (3.2.2)
     ref (2.0.0)
     rufus-scheduler (2.0.24)
       tzinfo (>= 0.3.22)
@@ -118,6 +120,8 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    whenever (0.9.4)
+      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -132,9 +136,11 @@ DEPENDENCIES
   dotenv-deployment
   gitlab
   octokit
+  redis
   technologist
   therubyracer
   unicorn
+  whenever
 
 BUNDLED WITH
    1.10.6
