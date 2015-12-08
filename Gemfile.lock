@@ -137,6 +137,7 @@ DEPENDENCIES
   gitlab
   octokit
   redis
+  rugged
   technologist
   therubyracer
   unicorn

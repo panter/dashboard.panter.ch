@@ -23,3 +23,9 @@ namespace :data do
     DataStore.clear
   end
 end
+
+desc 'Clones and updates all git repositories (github and gitlab)'
+task :clone_git_repositories do
+  require './lib/git_repository_cloner'
+  GitRepositoryCloner.new.run
+end
