@@ -1,31 +1,27 @@
 def update
-  controllr = Controllr.new
+  # in development mode we don't rely on the cron jobs
+  unless production?
+    require 'rake'
+    Rake.load_rakefile('./Rakefile')
+    Rake::Task[:'data:controllr'].invoke
+  end
 
   # employment
-  employees = controllr.employee_count
-  contractors = controllr.contractor_count
-
-  send_event('employees', { current: employees })
-  send_event('contractors', { current: contractors })
+  send_event('employees', DataStore.get('employees'))
+  send_event('contractors', DataStore.get('contractors'))
 
   # performance
-  performance_month = Date.today.prev_month.prev_month
-  last_performance = controllr.performance(performance_month.prev_month.month)
-  current_performance = controllr.performance(performance_month.month)
-
-  send_event('salary-performance', { current: current_performance, last: last_performance })
+  send_event('salary-performance', DataStore.get('salary-performance'))
 
   # working hours
-  hours_worked = controllr.hours_worked(Date.today.month)
-  send_event('hours-worked', { current: hours_worked })
+  send_event('hours-worked', DataStore.get('hours-worked'))
 
   # salaries per month
-  points = YAML.load_file('config/salaries.yml')[Date.today.year].map { |key, value| { x: key, y: value } }
-  send_event('salary-graph', points: points)
+  send_event('salary-graph', DataStore.get('salary-graph'))
 end
 
 update
 
-SCHEDULER.every '1d' do
+SCHEDULER.every '10m' do
   update
 end
