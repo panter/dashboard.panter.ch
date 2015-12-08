@@ -5,6 +5,7 @@ class Github
   # we exclude projects that contain too much vendor
   # stuff. this distorts our statistics. E.g. wordpress
   # repositories.
+  # also, some repositories exist in gitlab as well.
   REPOSITORY_BLACKLIST = (ENV['GITHUB_REPO_BLACKLIST'] || '').split(',')
 
   ORGANIZATION_NAME = ENV['GITHUB_ORGANIZATION_NAME']
