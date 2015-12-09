@@ -30,7 +30,7 @@ class GitRepositoryCloner
     )
   end
 
-  def clone_or_update(user, password, repositories, clone_method)
+  def clone_or_update(user, password, repositories, clone_url_method)
     credentials = Rugged::Credentials::UserPassword.new(
       username: user,
       password: password
@@ -38,7 +38,7 @@ class GitRepositoryCloner
 
     repositories.each do |repository|
       target_directory = "repositories/#{repository.name}"
-      remote_url = repository.send(clone_method)
+      remote_url = repository.send(clone_url_method)
 
       if Dir.exist?(target_directory)
         local_repository = Rugged::Repository.new(target_directory)
