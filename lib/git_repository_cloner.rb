@@ -42,7 +42,7 @@ class GitRepositoryCloner
 
       if Dir.exist?(target_directory)
         local_repository = Rugged::Repository.new(target_directory)
-        origin = local_repository.remotes.select { |remote| remote.name == 'origin' }.first
+        origin = local_repository.remotes.find { |remote| remote.name == 'origin' }
 
         # make sure we don't mix up github and gitlab repositories
         # (this may be the case when e.g. a github repo is transferred
