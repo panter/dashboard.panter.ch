@@ -12,6 +12,9 @@ class Gitlab::Client
 end
 
 class GitlabClient
+  # some repositories exist on github as well.
+  REPOSITORY_BLACKLIST = (ENV['GITLAB_REPO_BLACKLIST'] || '').split(',')
+
   ORGANIZATION_NAME = ENV['GITLAB_ORGANIZATION_NAME']
 
   def initialize
@@ -28,6 +31,7 @@ class GitlabClient
         projects
           .select { |project| project.namespace.name == ORGANIZATION_NAME }
           .select { |project| project.default_branch }
+          .reject { |project| REPOSITORY_BLACKLIST.include?(project.path_with_namespace) }
       end
   end
 

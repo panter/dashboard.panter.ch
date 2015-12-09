@@ -17,6 +17,7 @@ GEM
       capistrano (>= 3.0)
       capistrano-rbenv (>= 2.0)
     chronic (0.10.2)
+    coderay (1.1.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
@@ -51,6 +52,7 @@ GEM
     json (1.8.3)
     kgio (2.9.3)
     libv8 (3.16.14.11)
+    method_source (0.8.2)
     mini_portile (0.6.2)
     multi_json (1.11.0)
     multi_xml (0.5.5)
@@ -62,6 +64,10 @@ GEM
       mini_portile (~> 0.6.0)
     octokit (4.0.1)
       sawyer (~> 0.6.0, >= 0.5.3)
+    pry (0.10.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.5.3)
     rack-protection (1.5.3)
       rack
@@ -136,7 +142,9 @@ DEPENDENCIES
   dotenv-deployment
   gitlab
   octokit
+  pry
   redis
+  rugged
   technologist
   therubyracer
   unicorn

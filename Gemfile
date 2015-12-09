@@ -11,9 +11,14 @@ gem 'dotenv-deployment'
 gem 'gitlab'
 gem 'octokit'
 gem 'redis'
+gem 'rugged'
 gem 'technologist'
 gem 'unicorn'
 gem 'whenever'
+
+group :development do
+  gem 'pry'
+end
 
 group :production do
   gem 'therubyracer'
