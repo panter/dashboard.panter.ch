@@ -1,5 +1,7 @@
 *DS_STORE
 history.yml
+repositories/
+tmp/
 
 # dotenv
 .env
