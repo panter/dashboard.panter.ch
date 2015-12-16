@@ -59,7 +59,12 @@ class Github
   # @return [Fixnum] the number of pull request comments
   def pull_request_comments_count
     events
-      .select { |event| event.type == 'PullRequestReviewCommentEvent' }
+      .select { |event|
+        # inline-diff comments
+        event.type == 'PullRequestReviewCommentEvent' ||
+        # comments in the main thread
+        (event.type == 'IssueCommentEvent' && event.payload.issue.pull_request)
+      }
       .length
   end
 
