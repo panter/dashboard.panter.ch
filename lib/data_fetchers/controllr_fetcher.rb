@@ -40,7 +40,14 @@ class ControllrFetcher
   end
 
   def salaries
-    points = YAML.load_file('config/salaries.yml')[Date.today.year].map { |key, value| { x: key, y: value } }
+    points = YAML.load_file('config/salaries.yml')[Date.today.year].map do |key, value|
+      {
+        x: key,
+        y: value[0],
+        moreinfo_value: value[1]
+      }
+    end
+
     DataStore.set('salary-graph', points: points)
   end
 end
