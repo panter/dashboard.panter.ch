@@ -6,6 +6,10 @@ class Dashing.Graph extends Dashing.Widget
     if points
       points[points.length - 1].y
 
+  @accessor 'moreinfo-value', ->
+    points = @get('points')
+    points[points.length - 1].moreinfo_value
+
   ready: ->
     container = $(@node).parent()
     # Gross hacks. Let's fix this.
