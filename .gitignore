@@ -7,4 +7,5 @@ tmp/
 .env
 
 # configs
+.bundle
 config/salaries.yml
