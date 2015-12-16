@@ -2,4 +2,4 @@
 
 <h2 class="value" data-bind="current | prettyNumber | prepend prefix"></h2>
 
-<p class="more-info" data-bind="moreinfo"></p>
+<p class="more-info" data-bind="moreinfo | interpolate {'value': 'moreinfo-value'}"></p>
