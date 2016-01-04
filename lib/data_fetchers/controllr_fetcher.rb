@@ -40,7 +40,10 @@ class ControllrFetcher
   end
 
   def salaries
-    points = YAML.load_file('config/salaries.yml')[Date.today.year].map do |key, value|
+    to_month = Date.today.prev_month.prev_month
+    years_salaries = YAML.load_file('config/salaries.yml')[to_month.year]
+    years_salaries = (1..to_month.month).map { |month| [month, years_salaries[month]] }.to_h
+    points = years_salaries.map do |key, value|
       {
         x: key,
         y: value[0],
