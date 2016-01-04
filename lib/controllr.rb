@@ -15,16 +15,16 @@ class Controllr
   end
 
   # @param month [Fixnum] the month as a number (starting at 1 for January), see `Date#month`.
-  def performance(month)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}")
+  def performance(month, year)
+    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
     data_totals = data['totals']
     performance = data_totals['internal_hours_billable'].to_f / data_totals['internal_hours_worked'].to_f
 
     performance.round(2)
   end
 
-  def hours_worked(month)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}")
+  def hours_worked(month, year)
+    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
     data_totals = data['totals']
     data_totals['internal_hours_worked'].to_i
   end
