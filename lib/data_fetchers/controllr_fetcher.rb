@@ -28,19 +28,22 @@ class ControllrFetcher
 
   def performance
     performance_month = Date.today.prev_month.prev_month
-    last_performance = controllr.performance(performance_month.prev_month.month)
-    current_performance = controllr.performance(performance_month.month)
+    last_performance = controllr.performance(performance_month.prev_month.month, performance_month.year)
+    current_performance = controllr.performance(performance_month.month, performance_month.year)
 
     DataStore.set('salary-performance', { current: current_performance, last: last_performance })
   end
 
   def working_hours
-    hours_worked = controllr.hours_worked(Date.today.month)
+    hours_worked = controllr.hours_worked(Date.today.month, Date.today.year)
     DataStore.set('hours-worked', { current: hours_worked })
   end
 
   def salaries
-    points = YAML.load_file('config/salaries.yml')[Date.today.year].map do |key, value|
+    to_month = Date.today.prev_month.prev_month
+    years_salaries = YAML.load_file('config/salaries.yml')[to_month.year]
+    years_salaries = (1..to_month.month).map { |month| [month, years_salaries[month]] }.to_h
+    points = years_salaries.map do |key, value|
       {
         x: key,
         y: value[0],
