@@ -1,5 +1,5 @@
 require 'octokit'
-require './lib/frameworks'
+require './lib/local_repository/frameworks'
 
 class Github
   # we exclude projects that contain too much vendor

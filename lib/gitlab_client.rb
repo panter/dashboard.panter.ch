@@ -1,5 +1,5 @@
 require 'gitlab'
-require './lib/frameworks'
+require './lib/local_repository/frameworks'
 
 # Monkeypatch the gitlab gem to add support for the endpoint
 # http://doc.gitlab.com/ce/api/notes.html#list-all-merge-request-notes

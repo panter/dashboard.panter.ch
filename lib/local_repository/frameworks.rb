@@ -1,17 +1,10 @@
 require 'technologist'
+require './lib/local_repository/local_repository_base'
 
-class Frameworks
-  attr_reader :directories
-
-  def initialize(directories)
-    @directories = directories
-  end
-
+class Frameworks < LocalRepositoryBase
   def as_percentages
     numbers = Hash[
-      *directories
-        .map { |directory| "repositories/#{directory}" }
-        .select { |directory| Dir.exist?(directory) }
+      *valid_directories
         .map do |directory|
           # don't bail on broken repositores
           Technologist::Repository.new(directory).frameworks rescue []
@@ -27,8 +20,9 @@ class Frameworks
     total = numbers.values.inject(&:+)
 
     # convert to percent
-    numbers.each {|key, value| numbers[key] = (100.0 / total * value).round(2) }
+    numbers.each { |key, value| numbers[key] = (100.0 / total * value).round(2) }
 
     numbers
   end
 end
+
