@@ -53,10 +53,16 @@ class GitFetcher
   end
 
   def frameworks
-    frameworks = github.frameworks.merge(gitlab.frameworks) { |key, value1, value2| (value1 + value2).round }
+    frameworks = github.frameworks
+      .merge(gitlab.frameworks) { |key, value1, value2| ((value1 + value2 / 2.0)).round }
+      .sort_by { |key, value| value }
+      .reverse
+      .take(8)
+      .to_h
+
     frameworks = frameworks.map do |framework, percent|
       { label: framework, value: "#{percent}%" }
-    end.take(8)
+    end
 
     DataStore.set('frameworks', items: frameworks)
   end
