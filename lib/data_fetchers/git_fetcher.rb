@@ -38,9 +38,16 @@ class GitFetcher
   end
 
   def languages
-    languages = github.languages.map do |language, percent|
+    languages = github.languages
+      .merge(gitlab.languages) { |key, value1, value2| ((value1 + value2) / 2.0).round }
+      .sort_by { |key, value| value }
+      .reverse
+      .take(8)
+      .to_h
+
+    languages = languages.map do |language, percent|
       { label: language, value: "#{percent}%" }
-    end.take(8)
+    end
 
     DataStore.set('programming-languages', items: languages)
   end
