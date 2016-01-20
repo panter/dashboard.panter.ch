@@ -1,5 +1,6 @@
 require 'rugged'
 require 'linguist'
+require './lib/local_repository/local_repository_base'
 
 class Languages < LocalRepositoryBase
   def absolute_values
