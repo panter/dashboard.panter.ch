@@ -112,10 +112,10 @@ class Github
       end
   end
 
-  # @return [Hash{Symbol=>Float}] the languages with the overall percentage
+  # @return [Hash{Symbol=>Integer}] the languages with the overall absolute count
   #   as value and the language name as key.
   def languages
-    @languages ||= Languages.new(own_repositories.map(&:name)).as_percentages
+    @languages ||= Languages.new(own_repositories.map(&:name)).absolute_values
   end
 
   def frameworks
