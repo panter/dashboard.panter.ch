@@ -133,8 +133,10 @@ class GitlabClient
     @languages ||= Languages.new(projects.map(&:name)).absolute_values
   end
 
+  # @return [Hash{Symbol=>Integer}] the frameworks with the overall absolute count
+  #   as value and the language name as key.
   def frameworks
-    @frameworks ||= Frameworks.new(projects.map(&:name)).as_percentages
+    @frameworks ||= Frameworks.new(projects.map(&:name)).absolute_values
   end
 
   private

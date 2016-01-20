@@ -53,11 +53,9 @@ class GitFetcher
 
   def frameworks
     frameworks = github.frameworks
-      .merge(gitlab.frameworks) { |key, value1, value2| ((value1 + value2 / 2.0)).round }
-      .sort_by { |key, value| value }
-      .reverse
-      .take(8)
-      .to_h
+    frameworks.merge!(gitlab.frameworks) { |key, value1, value2| frameworks[key] = value1 + value2 }
+
+    frameworks = PercentCalculator.to_percent(frameworks).take(8).to_h
 
     frameworks = frameworks.map do |framework, percent|
       { label: framework, value: "#{percent}%" }

@@ -118,7 +118,9 @@ class Github
     @languages ||= Languages.new(own_repositories.map(&:name)).absolute_values
   end
 
+  # @return [Hash{Symbol=>Integer}] the frameworks with the overall absolute count
+  #   as value and the language name as key.
   def frameworks
-    @frameworks ||= Frameworks.new(own_repositories.map(&:name)).as_percentages
+    @frameworks ||= Frameworks.new(own_repositories.map(&:name)).absolute_values
   end
 end
