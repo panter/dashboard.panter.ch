@@ -10,8 +10,8 @@ class Controllr
   end
 
   def user_count(employment)
-    data = fetch("/users.json?&iDisplayLength=1000&search[active_in][]=true&search[employment_in][]=#{employment}")
-    data.fetch('iTotalDisplayRecords', 0)
+    data = user_data.select { |user| user['employment'] == employment }
+    data.length
   end
 
   # @param month [Fixnum] the month as a number (starting at 1 for January), see `Date#month`.
@@ -31,6 +31,11 @@ class Controllr
 
   private
 
+  def user_data
+    data = fetch("/api/users.json")
+    data.select { |user| user['active'] }
+  end
+
   def fetch(api_url)
     url = url(api_url)
     json = Net::HTTP.get(URI(url))
@@ -39,8 +44,9 @@ class Controllr
 
   def url(api_url)
     base = 'http://controllr.panter.biz'
-    token = "&user_token=#{ENV['CONTROLLR_TOKEN']}"
+    token = "user_token=#{ENV['CONTROLLR_TOKEN']}"
+    query_start = api_url.include?('?') ? '&' : '?'
 
-    "#{base}#{api_url}#{token}"
+    "#{base}#{api_url}#{query_start}#{token}"
   end
 end
