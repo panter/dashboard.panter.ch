@@ -12,6 +12,7 @@ class ControllrFetcher
     performance
     working_hours
     salaries
+    average_age
   end
 
   private
@@ -52,5 +53,10 @@ class ControllrFetcher
     end
 
     DataStore.set('salary-graph', points: points)
+  end
+
+  def average_age
+    average_age = controllr.average_age
+    DataStore.set('average-age', { current: average_age })
   end
 end

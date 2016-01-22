@@ -1,4 +1,5 @@
 require 'json'
+require './lib/age'
 
 class Controllr
   def employee_count
@@ -12,6 +13,17 @@ class Controllr
   def user_count(employment)
     data = user_data.select { |user| user['employment'] == employment }
     data.length
+  end
+
+  def average_age
+    data = user_data.select { |user| user['employment'] == 'employee' }
+
+    ages = data.map { |user|
+      date_of_birth = Date.parse(user['date_of_birth'])
+      Age.from_date(date_of_birth)
+    }.compact
+
+    ages.inject(&:+) / ages.length
   end
 
   # @param month [Fixnum] the month as a number (starting at 1 for January), see `Date#month`.
