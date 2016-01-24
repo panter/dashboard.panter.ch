@@ -1,7 +1,11 @@
 require 'json'
+require 'geocoder'
+require 'redis'
 require './lib/age'
 
 class Controllr
+  OFFICE_ADDRESS = ENV['OFFICE_ADDRESS']
+
   def employee_count
     user_count('employee')
   end
@@ -39,6 +43,18 @@ class Controllr
     data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
     data_totals = data['totals']
     data_totals['internal_hours_worked'].to_i
+  end
+
+  def commute_distances
+    Geocoder.configure(units: :km, cache: Redis.new)
+
+    data = user_data.select { |user| user['employment'] == 'employee' }
+    data.map { |user|
+      if user['address']
+        home_address = user['address'].gsub(/[\n\r]+/, ', ')
+        Geocoder::Calculations.distance_between(OFFICE_ADDRESS, home_address)
+      end
+    }.compact.sort
   end
 
   private

@@ -13,6 +13,7 @@ class ControllrFetcher
     working_hours
     salaries
     average_age
+    commute_distances
   end
 
   private
@@ -67,5 +68,10 @@ class ControllrFetcher
   def average_age
     average_age = controllr.average_age
     DataStore.set('average-age', { current: average_age })
+  end
+
+  def commute_distances
+    distances = controllr.commute_distances.map { |distance| distance.round(1) }
+    DataStore.set('commute-distances', { value1: distances.first, value2: distances.last })
   end
 end
