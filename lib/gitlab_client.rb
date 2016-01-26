@@ -1,5 +1,6 @@
 require 'gitlab'
-require './lib/frameworks'
+require './lib/local_repository/frameworks'
+require './lib/local_repository/languages'
 
 # Monkeypatch the gitlab gem to add support for the endpoint
 # http://doc.gitlab.com/ce/api/notes.html#list-all-merge-request-notes
@@ -126,8 +127,16 @@ class GitlabClient
     pull_request_comments.length
   end
 
+  # @return [Hash{Symbol=>Integer}] the languages with the overall absolute count
+  #   as value and the language name as key.
+  def languages
+    @languages ||= Languages.new(projects.map(&:name)).absolute_values
+  end
+
+  # @return [Hash{Symbol=>Integer}] the frameworks with the overall absolute count
+  #   as value and the language name as key.
   def frameworks
-    @frameworks ||= Frameworks.new(projects.map(&:name)).as_percentages
+    @frameworks ||= Frameworks.new(projects.map(&:name)).absolute_values
   end
 
   private

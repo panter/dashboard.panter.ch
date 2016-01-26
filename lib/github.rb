@@ -1,5 +1,6 @@
 require 'octokit'
-require './lib/frameworks'
+require './lib/local_repository/frameworks'
+require './lib/local_repository/languages'
 
 class Github
   # we exclude projects that contain too much vendor
@@ -111,31 +112,15 @@ class Github
       end
   end
 
-  # @return [Hash{Symbol=>Float}] the languages with the overall percentage
+  # @return [Hash{Symbol=>Integer}] the languages with the overall absolute count
   #   as value and the language name as key.
   def languages
-    @languages ||=
-      begin
-        languages = own_repositories.map(&:full_name).map do |repo_name|
-          client.languages(repo_name)
-        end.reject { |resource| resource.attrs.empty? }
-
-        # collapse all the hashes into one, sum up the values
-        grouped = Hash.new(0)
-        languages.each do |language_hash|
-          language_hash.each { |language| grouped[language.first] += language.last }
-        end
-
-        percent_factor = 100 / grouped.values.inject(&:+).to_f
-
-        # convert to percent and sort
-        grouped = grouped.map do |language|
-          [language.first, (percent_factor * language.last).round(2)]
-        end.sort_by(&:last).reverse.to_h
-      end
+    @languages ||= Languages.new(own_repositories.map(&:name)).absolute_values
   end
 
+  # @return [Hash{Symbol=>Integer}] the frameworks with the overall absolute count
+  #   as value and the language name as key.
   def frameworks
-    @frameworks ||= Frameworks.new(own_repositories.map(&:name)).as_percentages
+    @frameworks ||= Frameworks.new(own_repositories.map(&:name)).absolute_values
   end
 end

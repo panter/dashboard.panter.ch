@@ -1,6 +1,7 @@
 require './lib/data_store'
 require './lib/github'
 require './lib/gitlab_client'
+require './lib/percent_calculator'
 
 class GitFetcher
   def initialize
@@ -38,18 +39,27 @@ class GitFetcher
   end
 
   def languages
-    languages = github.languages.map do |language, percent|
+    languages = github.languages
+    languages.merge!(gitlab.languages) { |key, value1, value2| languages[key] = value1 + value2 }
+
+    languages = PercentCalculator.to_percent(languages).take(8).to_h
+
+    languages = languages.map do |language, percent|
       { label: language, value: "#{percent}%" }
-    end.take(8)
+    end
 
     DataStore.set('programming-languages', items: languages)
   end
 
   def frameworks
-    frameworks = github.frameworks.merge(gitlab.frameworks) { |key, value1, value2| (value1 + value2).round }
+    frameworks = github.frameworks
+    frameworks.merge!(gitlab.frameworks) { |key, value1, value2| frameworks[key] = value1 + value2 }
+
+    frameworks = PercentCalculator.to_percent(frameworks).take(8).to_h
+
     frameworks = frameworks.map do |framework, percent|
       { label: framework, value: "#{percent}%" }
-    end.take(8)
+    end
 
     DataStore.set('frameworks', items: frameworks)
   end
