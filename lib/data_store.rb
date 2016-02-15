@@ -1,4 +1,5 @@
 require 'redis'
+require 'json'
 
 class DataStore
   class << self
