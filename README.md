@@ -19,3 +19,7 @@ Built with [Dashing](https://shopify.github.io/dashing/).
 * `cp config/salaries.yml.sample config/salaries.yml` and fill in some values
 * `bundle`
 * `dashing s`
+
+## License
+
+Licensed under the [GNU General Public License v3.0](LICENSE)
