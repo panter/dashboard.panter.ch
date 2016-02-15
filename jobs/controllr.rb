@@ -18,6 +18,9 @@ def update
 
   # salaries per month
   send_event('salary-graph', DataStore.get('salary-graph'))
+
+  # average age
+  send_event('average-age', DataStore.get('average-age'))
 end
 
 update
