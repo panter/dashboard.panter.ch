@@ -41,14 +41,23 @@ class ControllrFetcher
   end
 
   def salaries
+    years_salaries = YAML.load_file('config/salaries.yml')
+
     to_month = Date.today.prev_month.prev_month
-    years_salaries = YAML.load_file('config/salaries.yml')[to_month.year]
-    years_salaries = (1..to_month.month).map { |month| [month, years_salaries[month]] }.to_h
-    points = years_salaries.map do |key, value|
+    # get the first day of the month to be able to properly iterate
+    # (see iteration comment below)
+    to_month = Date.new(to_month.year, to_month.month, 1)
+    from_month = to_month << 11
+    # select the first day only, otherwise the iteration includes every day
+    months = (from_month..to_month).select { |month| month.day == 1 }
+
+    points = months.map do |month|
+      salary, workload = years_salaries[month.year][month.month]
+
       {
-        x: key,
-        y: value[0],
-        moreinfo_value: value[1]
+        x: month.month,
+        y: salary,
+        moreinfo_value: workload
       }
     end
 
