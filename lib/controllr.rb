@@ -4,8 +4,6 @@ require 'redis'
 require './lib/age'
 
 class Controllr
-  OFFICE_ADDRESS = ENV['OFFICE_ADDRESS']
-
   def employee_count
     user_count('employee')
   end
@@ -52,9 +50,19 @@ class Controllr
     data.map { |user|
       if user['address']
         home_address = user['address'].gsub(/[\n\r]+/, ', ')
-        Geocoder::Calculations.distance_between(OFFICE_ADDRESS, home_address)
+        Geocoder::Calculations.distance_between(office_address, home_address)
       end
     }.compact.sort
+  end
+
+  def office_address
+    @office_address ||=
+      begin
+        data = fetch("/api/system_settings.json")
+        data = data.find { |entry| entry['name'] == 'tenant' }['options']
+
+        "#{data['address']}, #{data['zip']} #{data['city']}"
+      end
   end
 
   private
