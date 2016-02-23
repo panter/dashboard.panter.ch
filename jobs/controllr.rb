@@ -21,6 +21,9 @@ def update
 
   # average age
   send_event('average-age', DataStore.get('average-age'))
+
+  # shortest / longest distance to the office
+  send_event('commute-distances', DataStore.get('commute-distances'))
 end
 
 update

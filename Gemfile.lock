@@ -43,6 +43,7 @@ GEM
     execjs (2.0.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    geocoder (1.2.14)
     github-linguist (4.7.3)
       charlock_holmes (~> 0.7.3)
       escape_utils (~> 1.1.0)
@@ -150,6 +151,7 @@ DEPENDENCIES
   dashing
   dotenv
   dotenv-deployment
+  geocoder
   github-linguist
   gitlab
   octokit
