@@ -29,11 +29,12 @@ class ControllrFetcher
   end
 
   def performance
-    performance_month = Date.today.prev_month.prev_month
-    last_performance = controllr.performance(performance_month.prev_month.month, performance_month.year)
-    current_performance = controllr.performance(performance_month.month, performance_month.year)
+    current_month = Date.today.prev_month.prev_month
+    previous_month = current_month.prev_month
+    previous_performance = controllr.performance(previous_month.month, previous_month.year)
+    current_performance = controllr.performance(current_month.month, current_month.year)
 
-    DataStore.set('salary-performance', { current: current_performance, last: last_performance })
+    DataStore.set('salary-performance', { current: current_performance, last: previous_performance })
   end
 
   def working_hours
