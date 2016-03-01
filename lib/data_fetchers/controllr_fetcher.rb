@@ -53,11 +53,12 @@ class ControllrFetcher
     # select the first day only, otherwise the iteration includes every day
     months = (from_month..to_month).select { |month| month.day == 1 }
 
-    points = months.map do |month|
+    points = months.map.with_index do |month, index|
       salary, workload = years_salaries[month.year][month.month]
 
       {
-        x: month.month,
+        # it seems that somehow x needs required to be in seconds
+        x: index + 1,
         y: salary,
         moreinfo_value: workload
       }
