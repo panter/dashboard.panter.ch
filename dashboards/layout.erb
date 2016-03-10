@@ -21,12 +21,27 @@
     ga('create', '<%= ENV['GOOGLE_ANALYTICS_TOKEN'] %>', 'auto');
     ga('send', 'pageview');
   </script>
+
+  <script type="text/javascript">
+    // Piwik
+    var _paq = _paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//<%= ENV['PIWIK_HOST'] %>/";
+      _paq.push(['setTrackerUrl', u+'piwik.php']);
+      _paq.push(['setSiteId', <%= ENV['PIWIK_TOKEN'] %>]);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <noscript><p><img src="//<%= ENV['PIWIK_HOST'] %>/piwik.php?idsite=<%= ENV['PIWIK_TOKEN'] %>" style="border:0;" alt="" /></p></noscript>
 </head>
   <body>
     <div id="container">
       <%= yield %>
     </div>
-  
+
     <% if development? %>
       <div id="saving-instructions">
         <p>Paste the following at the top of <i><%= params[:dashboard] %>.erb</i></p>
