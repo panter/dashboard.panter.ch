@@ -1,9 +1,11 @@
-require 'json'
 require 'geocoder'
 require 'redis'
 require './lib/age'
+require './lib/json_api'
 
 class Controllr
+  API_ENDPOINT = 'http://controllr.panter.biz'
+
   def employee_count
     user_count('employee')
   end
@@ -30,7 +32,7 @@ class Controllr
 
   # @param month [Fixnum] the month as a number (starting at 1 for January), see `Date#month`.
   def performance(month, year)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
+    data = fetch('/api/monthly_salaries/spreadsheet_data.json', { month: month, year: year })
     data_totals = data['totals']
     performance = data_totals['internal_hours_billable'].to_f / data_totals['internal_hours_worked'].to_f
 
@@ -38,7 +40,7 @@ class Controllr
   end
 
   def hours_worked(month, year)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
+    data = fetch('/api/monthly_salaries/spreadsheet_data.json', { month: month, year: year })
     data_totals = data['totals']
     data_totals['internal_hours_worked'].to_i
   end
@@ -58,7 +60,7 @@ class Controllr
   def office_address
     @office_address ||=
       begin
-        data = fetch("/api/system_settings.json")
+        data = fetch('/api/system_settings.json')
         data = data.find { |entry| entry['name'] == 'tenant' }['options']
 
         "#{data['address']}, #{data['zip']} #{data['city']}"
@@ -68,21 +70,14 @@ class Controllr
   private
 
   def user_data
-    data = fetch("/api/users.json")
+    data = fetch('/api/users.json')
     data.select { |user| user['active'] }
   end
 
-  def fetch(api_url)
-    url = url(api_url)
-    json = Net::HTTP.get(URI(url))
-    JSON.parse(json)
-  end
+  def fetch(url, params = {})
+    url = API_ENDPOINT + url
+    params = params.merge(user_token: ENV['CONTROLLR_TOKEN'])
 
-  def url(api_url)
-    base = 'http://controllr.panter.biz'
-    token = "user_token=#{ENV['CONTROLLR_TOKEN']}"
-    query_start = api_url.include?('?') ? '&' : '?'
-
-    "#{base}#{api_url}#{query_start}#{token}"
+    JsonApi.fetch(url, params)
   end
 end
