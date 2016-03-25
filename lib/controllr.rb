@@ -48,13 +48,15 @@ class Controllr
   def commute_distances
     Geocoder.configure(units: :km, cache: Redis.new)
 
-    data = user_data.select { |user| user['employment'] == 'employee' }
-    data.map { |user|
-      if user['address']
-        home_address = user['address'].gsub(/[\n\r]+/, ', ')
-        Geocoder::Calculations.distance_between(office_address, home_address)
-      end
-    }.compact.sort
+    user_addresses.map { |address|
+      Geocoder::Calculations.distance_between(address, office_address)
+    }.sort
+  end
+
+  def commute_durations
+    user_addresses.map { |address|
+      PublicTransport.connection_duration(address, office_address)
+    }.sort
   end
 
   def office_address
@@ -70,8 +72,24 @@ class Controllr
   private
 
   def user_data
-    data = fetch('/api/users.json')
-    data.select { |user| user['active'] }
+    @user_data ||=
+      begin
+        fetch('/api/users.json').select { |user| user['active'] }
+      end
+  end
+
+  def user_addresses
+    @user_addresses ||=
+      begin
+        user_data
+          .select { |user| user['employment'] == 'employee' }
+          .map { |user|
+            if user['address']
+              user['address'].gsub(/[\n\r]+/, ', ')
+            end
+          }
+          .compact
+      end
   end
 
   def fetch(url, params = {})

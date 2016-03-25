@@ -74,6 +74,19 @@ class ControllrFetcher
 
   def commute_distances
     distances = controllr.commute_distances.map { |distance| distance.round(1) }
-    DataStore.set('commute-distances', { value1: distances.first, value2: distances.last })
+    durations = controllr.commute_durations.map do |duration|
+      hours, minutes = duration.divmod(60)
+      if hours == 0
+        "#{minutes}min"
+      else
+        total_hours = hours + (minutes / 60.0).round(2)
+        "#{total_hours}h"
+      end
+    end
+
+    DataStore.set('commute-distances', {
+      value1: "#{durations.first} / #{distances.first}km",
+      value2: "#{durations.last} / #{distances.last}km"
+    })
   end
 end
