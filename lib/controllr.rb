@@ -1,9 +1,11 @@
-require 'json'
 require 'geocoder'
 require 'redis'
 require './lib/age'
+require './lib/json_api'
 
 class Controllr
+  API_ENDPOINT = 'http://controllr.panter.biz'
+
   def employee_count
     user_count('employee')
   end
@@ -30,7 +32,7 @@ class Controllr
 
   # @param month [Fixnum] the month as a number (starting at 1 for January), see `Date#month`.
   def performance(month, year)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
+    data = fetch('/api/monthly_salaries/spreadsheet_data.json', { month: month, year: year })
     data_totals = data['totals']
     performance = data_totals['internal_hours_billable'].to_f / data_totals['internal_hours_worked'].to_f
 
@@ -38,7 +40,7 @@ class Controllr
   end
 
   def hours_worked(month, year)
-    data = fetch("/api/monthly_salaries/spreadsheet_data.json?month=#{month}&year=#{year}")
+    data = fetch('/api/monthly_salaries/spreadsheet_data.json', { month: month, year: year })
     data_totals = data['totals']
     data_totals['internal_hours_worked'].to_i
   end
@@ -46,19 +48,21 @@ class Controllr
   def commute_distances
     Geocoder.configure(units: :km, cache: Redis.new)
 
-    data = user_data.select { |user| user['employment'] == 'employee' }
-    data.map { |user|
-      if user['address']
-        home_address = user['address'].gsub(/[\n\r]+/, ', ')
-        Geocoder::Calculations.distance_between(office_address, home_address)
-      end
-    }.compact.sort
+    user_addresses.map { |address|
+      Geocoder::Calculations.distance_between(address, office_address)
+    }.sort
+  end
+
+  def commute_durations
+    user_addresses.map { |address|
+      PublicTransport.connection_duration(address, office_address)
+    }.sort
   end
 
   def office_address
     @office_address ||=
       begin
-        data = fetch("/api/system_settings.json")
+        data = fetch('/api/system_settings.json')
         data = data.find { |entry| entry['name'] == 'tenant' }['options']
 
         "#{data['address']}, #{data['zip']} #{data['city']}"
@@ -68,21 +72,30 @@ class Controllr
   private
 
   def user_data
-    data = fetch("/api/users.json")
-    data.select { |user| user['active'] }
+    @user_data ||=
+      begin
+        fetch('/api/users.json').select { |user| user['active'] }
+      end
   end
 
-  def fetch(api_url)
-    url = url(api_url)
-    json = Net::HTTP.get(URI(url))
-    JSON.parse(json)
+  def user_addresses
+    @user_addresses ||=
+      begin
+        user_data
+          .select { |user| user['employment'] == 'employee' }
+          .map { |user|
+            if user['address']
+              user['address'].gsub(/[\n\r]+/, ', ')
+            end
+          }
+          .compact
+      end
   end
 
-  def url(api_url)
-    base = 'http://controllr.panter.biz'
-    token = "user_token=#{ENV['CONTROLLR_TOKEN']}"
-    query_start = api_url.include?('?') ? '&' : '?'
+  def fetch(url, params = {})
+    url = API_ENDPOINT + url
+    params = params.merge(user_token: ENV['CONTROLLR_TOKEN'])
 
-    "#{base}#{api_url}#{query_start}#{token}"
+    JsonApi.fetch(url, params)
   end
 end
