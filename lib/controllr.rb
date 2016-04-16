@@ -2,6 +2,7 @@ require 'geocoder'
 require 'redis'
 require './lib/age'
 require './lib/json_api'
+require './lib/public_transport'
 
 class Controllr
   API_ENDPOINT = 'http://controllr.panter.biz'
