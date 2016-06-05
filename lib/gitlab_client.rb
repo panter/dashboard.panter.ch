@@ -96,6 +96,8 @@ class GitlabClient
       begin
         comments = []
         projects.each do |project|
+          next unless project.merge_requests_enabled
+
           merge_requests = paginate(
             :merge_requests,
             args: [project.id],
