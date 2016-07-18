@@ -16,12 +16,12 @@ class Controllr
   end
 
   def user_count(employment)
-    data = user_data.select { |user| user['employment'] == employment }
+    data = user_data(employment: employment)
     data.length
   end
 
   def average_age
-    data = user_data.select { |user| user['employment'] == 'employee' }
+    data = user_data(employment: 'employee')
 
     ages = data.map { |user|
       date_of_birth = Date.parse(user['date_of_birth'])
@@ -72,18 +72,21 @@ class Controllr
 
   private
 
-  def user_data
+  def user_data(filters = {})
     @user_data ||=
       begin
         fetch('/api/users.json').select { |user| user['active'] }
       end
+
+    filters.inject(@user_data) do |user_data, filter|
+      user_data = user_data.select { |user| user[filter[0].to_s] == filter[1] }
+    end
   end
 
   def user_addresses
     @user_addresses ||=
       begin
-        user_data
-          .select { |user| user['employment'] == 'employee' }
+        user_data(employment: 'employee')
           .map { |user|
             if user['address']
               user['address'].gsub(/[\n\r]+/, ', ')
