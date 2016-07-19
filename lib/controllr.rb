@@ -70,6 +70,26 @@ class Controllr
       end
   end
 
+  def children_per_employee
+    employees = user_data(employment: 'employee')
+
+    children_count = employees
+      .map { |user|
+        if user['children']
+          lines = user['children'].split(/\n/)
+          # lines without a date are comments and not actual children
+          lines = lines.select { |line| line =~ /\d{2}\.\d{2}\.\d{4}/ }
+
+          lines.length
+        end
+      }
+      .flatten
+      .map(&:to_f)
+      .inject(&:+)
+
+      (children_count / employees.length.to_f).round(2)
+  end
+
   private
 
   def user_data(filters = {})

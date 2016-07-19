@@ -14,6 +14,7 @@ class ControllrFetcher
     salaries
     average_age
     commute_distances
+    children_per_employee
   end
 
   private
@@ -88,5 +89,10 @@ class ControllrFetcher
       value1: "#{durations.first} / #{distances.first}km",
       value2: "#{durations.last} / #{distances.last}km"
     })
+  end
+
+  def children_per_employee
+    children_per_employee = controllr.children_per_employee
+    DataStore.set('children-per-employee', { current: children_per_employee });
   end
 end
