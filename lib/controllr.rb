@@ -16,12 +16,12 @@ class Controllr
   end
 
   def user_count(employment)
-    data = user_data.select { |user| user['employment'] == employment }
+    data = user_data(employment: employment)
     data.length
   end
 
   def average_age
-    data = user_data.select { |user| user['employment'] == 'employee' }
+    data = user_data(employment: 'employee')
 
     ages = data.map { |user|
       date_of_birth = Date.parse(user['date_of_birth'])
@@ -70,20 +70,43 @@ class Controllr
       end
   end
 
+  def children_per_employee
+    employees = user_data(employment: 'employee')
+
+    children_count = employees
+      .map { |user|
+        if user['children']
+          lines = user['children'].split(/\n/)
+          # lines without a date are comments and not actual children
+          lines = lines.select { |line| line =~ /\d{2}\.\d{2}\.\d{4}/ }
+
+          lines.length
+        end
+      }
+      .flatten
+      .map(&:to_f)
+      .inject(&:+)
+
+      (children_count / employees.length.to_f).round(2)
+  end
+
   private
 
-  def user_data
+  def user_data(filters = {})
     @user_data ||=
       begin
         fetch('/api/users.json').select { |user| user['active'] }
       end
+
+    filters.inject(@user_data) do |user_data, filter|
+      user_data = user_data.select { |user| user[filter[0].to_s] == filter[1] }
+    end
   end
 
   def user_addresses
     @user_addresses ||=
       begin
-        user_data
-          .select { |user| user['employment'] == 'employee' }
+        user_data(employment: 'employee')
           .map { |user|
             if user['address']
               user['address'].gsub(/[\n\r]+/, ', ')

@@ -24,6 +24,9 @@ def update
 
   # shortest / longest distance to the office
   send_event('commute-distances', DataStore.get('commute-distances'))
+
+  # children per employee
+  send_event('children-per-employee', DataStore.get('children-per-employee'))
 end
 
 update
