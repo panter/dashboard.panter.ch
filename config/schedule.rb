@@ -1,3 +1,5 @@
+set :job_template, "nice ionice -c3 bash -l -c ':job'"
+
 every 10.minutes do
   rake 'data:git'
 end
