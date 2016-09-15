@@ -1,1 +1,1 @@
-server 'monitoring.panter.biz', roles: %w{app web db}
+server 'dashboard.panter.biz', roles: %w{app web db}
