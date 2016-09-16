@@ -5,7 +5,7 @@ require './lib/json_api'
 require './lib/public_transport'
 
 class Controllr
-  API_ENDPOINT = 'http://controllr.panter.biz'
+  API_ENDPOINT = 'https://controllr.panter.biz'
 
   def employee_count
     user_count('employee')
