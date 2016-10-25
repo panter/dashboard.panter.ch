@@ -23,6 +23,22 @@ Built with [Dashing](https://shopify.github.io/dashing/).
   production server.
 * `dashing s`
 
+  The server will fetch all data for all modules by default. To only load
+  certain modules the environment variable `MODULES` can be used.
+
+  Example 1, only load controllr data
+
+  `MODULES=controllr dashing s`
+
+  Example 2, skip all data fetching altogether (useful when you already have
+  data fetched previously and want to quickly start the server)
+
+  `MODULES= dashing s`
+
+  Example 3, fetch git and controllr data
+
+  `MODULES=controllr,git dashing s`
+
 ## License
 
 Licensed under the [GNU General Public License v3.0](LICENSE)

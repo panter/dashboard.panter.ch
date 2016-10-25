@@ -1,11 +1,4 @@
 def update
-  # in development mode we don't rely on the cron jobs
-  unless production?
-    require 'rake'
-    Rake.load_rakefile('./Rakefile')
-    Rake::Task[:'data:git'].invoke
-  end
-
   # commits
   send_event('commits', DataStore.get('commits'))
 
@@ -20,6 +13,16 @@ def update
 
   # frameworks
   send_event('frameworks', DataStore.get('frameworks'))
+end
+
+# in development mode we don't rely on the cron jobs
+if !Configuration.git_enabled?
+  puts '--> Skipping git data fetching.'
+elsif development?
+  puts '--> Fetching git data...'
+  require 'rake'
+  Rake.load_rakefile('./Rakefile')
+  Rake::Task[:'data:git'].invoke
 end
 
 update
