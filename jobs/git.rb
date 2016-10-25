@@ -1,4 +1,4 @@
-def update
+def update_git
   # commits
   send_event('commits', DataStore.get('commits'))
 
@@ -25,8 +25,8 @@ elsif development?
   Rake::Task[:'data:git'].invoke
 end
 
-update
+update_git
 
 SCHEDULER.every '10m' do
-  update
+  update_git
 end

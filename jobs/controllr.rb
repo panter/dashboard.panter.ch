@@ -1,4 +1,4 @@
-def update
+def update_controllr
   # employment
   send_event('employees', DataStore.get('employees'))
   send_event('contractors', DataStore.get('contractors'))
@@ -32,8 +32,8 @@ elsif development?
   Rake::Task[:'data:controllr'].invoke
 end
 
-update
+update_controllr
 
 SCHEDULER.every '10m' do
-  update
+  update_controllr
 end
