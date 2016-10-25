@@ -1,11 +1,4 @@
 def update
-  # in development mode we don't rely on the cron jobs
-  unless production?
-    require 'rake'
-    Rake.load_rakefile('./Rakefile')
-    Rake::Task[:'data:controllr'].invoke
-  end
-
   # employment
   send_event('employees', DataStore.get('employees'))
   send_event('contractors', DataStore.get('contractors'))
@@ -27,6 +20,16 @@ def update
 
   # children per employee
   send_event('children-per-employee', DataStore.get('children-per-employee'))
+end
+
+# in development mode we don't rely on the cron jobs
+if !Configuration.controllr_enabled?
+  puts '--> Skipping controllr data fetching.'
+elsif development?
+  puts '--> Fetching controllr data...'
+  require 'rake'
+  Rake.load_rakefile('./Rakefile')
+  Rake::Task[:'data:controllr'].invoke
 end
 
 update
