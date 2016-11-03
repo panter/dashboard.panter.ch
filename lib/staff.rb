@@ -1,41 +1,41 @@
 class Staff
   def employees
-    employees = data['employees']['count']
+    employees = data.employees.count
 
     { current: employees }
   end
 
   def contractors
-    employees = data['contractors']['count']
+    employees = data.contractors.count
 
     { current: employees }
   end
 
   def hours_worked
-   hours = data['hours-worked']['current-month']
+   hours = data.hoursWorked.currentMonth
 
    { current: hours }
   end
 
   def average_age
-    age = data['age']['average']
+    age = data.age.average
 
     { current: age }
   end
 
   def commute_distances
-    distances = data['commute-distances']
-    shortest = distances['shortest']
-    longest = distances['longest']
+    distances = data.commuteDistances
+    shortest = distances.shortest
+    longest = distances.longest
 
     {
-      value1: "#{shortest['duration']} / #{shortest['distance']}",
-      value2: "#{longest['duration']} / #{longest['distance']}"
+      value1: "#{shortest.duration} / #{shortest.distance}",
+      value2: "#{longest.duration} / #{longest.distance}"
     }
   end
 
   def children_per_employee
-    children = data['children-per-employee']['count']
+    children = data.childrenPerEmployee.count
 
     { current: children }
   end

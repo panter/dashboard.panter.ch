@@ -1,22 +1,22 @@
 class Salary
   def performance
-    performance = data['performance']
+    performance = data.performance
 
     {
-      current: performance['last-month'],
-      last: performance['second-to-last-month']
+      current: performance.lastMonth,
+      last: performance.secondToLastMonth
     }
   end
 
   def salaries
-    salaries = data['salaries']['one-year-back']
+    salaries = data.salaries.oneYearBack
 
     # it seems that somehow x needs to be in seconds
     salaries.reverse.map.with_index do |entry, index|
       {
         x: index + 1,
-        y: entry['salary'],
-        moreinfo_value: entry['workload']
+        y: entry.salary,
+        moreinfo_value: entry.workload
       }
     end
   end

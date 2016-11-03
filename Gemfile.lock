@@ -62,6 +62,7 @@ GEM
       rack (>= 1.0)
     raindrops (0.16.0)
     rake (11.2.2)
+    recursive-open-struct (1.0.1)
     ref (2.0.0)
     rufus-scheduler (2.0.24)
       tzinfo (>= 0.3.22)
@@ -114,6 +115,7 @@ DEPENDENCIES
   dotenv
   dotenv-deployment
   pry
+  recursive-open-struct
   therubyracer
   unicorn
 

@@ -1,19 +1,19 @@
 class Code
   def commits
-    commits = data['commits']['count']
+    commits = data.commits.count
 
     { current: commits }
   end
 
   def pull_request_comments
-    comments = data['pull-request-comments']['count']
+    comments = data.pullRequestComments.count
 
     { current: comments }
   end
 
   def additions_deletions
-    additions = data['line-additions']['count']
-    deletions = data['line-deletions']['count']
+    additions = data.lineAdditions.count
+    deletions = data.lineDeletions.count
 
     {
      value1: additions,
@@ -22,16 +22,16 @@ class Code
   end
 
   def programming_languages
-    languages = data['programming-languages'].take(8).map do |language, percent|
-      { label: language, value: percent }
+    languages = data.programmingLanguages.take(8).map do |language|
+      { label: language.name, value: "#{language.percentage}%" }
     end
 
     { items: languages }
   end
 
   def frameworks
-    frameworks = data['frameworks'].take(8).map do |framework, percent|
-      { label: framework, value: percent }
+    frameworks = data.frameworks.take(8).map do |framework|
+      { label: framework.name, value: "#{framework.percentage}%" }
     end
 
     { items: frameworks }
