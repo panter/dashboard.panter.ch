@@ -8,6 +8,8 @@ class Dashing.Graph extends Dashing.Widget
 
   @accessor 'moreinfo-value', ->
     points = @get('points')
+    # FIXME: in FF points is sometimes undefined
+    return if !points
     points[points.length - 1].moreinfo_value
 
   ready: ->
