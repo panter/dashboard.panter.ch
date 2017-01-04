@@ -12,7 +12,7 @@ class Salary
     salaries = data.salaries.oneYearBack
 
     # it seems that somehow x needs to be in seconds
-    salaries.reverse.map.with_index do |entry, index|
+    salaries.map.with_index do |entry, index|
       {
         x: index + 1,
         y: entry.salary,
