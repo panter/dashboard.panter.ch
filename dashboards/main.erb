@@ -3,16 +3,16 @@
 <div class="gridster">
   <ul>
 
-    <li class="salary" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="salary-performance" data-view="Number" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s performance" data-moreinfo="Factor of billable work"></div>
-    </li>
-
-    <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="employees" data-view="Number" data-title="employees"></div>
+    <li class="staff" data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="employees" data-view="Graph" data-title="employees" data-moreinfo="%{value} - current day"></div>
     </li>
 
     <li class="staff" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
       <div data-id="contractors" data-view="Number" data-title="contractors"></div>
+    </li>
+
+    <li class="salary" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="salary-performance" data-view="Number" data-title="<%= Date.today.prev_month.prev_month.strftime('%B').downcase %>'s performance" data-moreinfo="Factor of billable work"></div>
     </li>
 
     <li class="coding" data-row="1" data-col="1" data-sizex="1" data-sizey="1">
