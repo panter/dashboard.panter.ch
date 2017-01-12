@@ -1,8 +1,13 @@
 class Staff
   def employees
-    employees = data.employees.count
-
-    { current: employees }
+    first_date = Date.parse(data.employees.historicCount.first.date).strftime('%d.%m.%Y')
+    data.employees.historicCount.map.with_index do |entry, index|
+      {
+        x: index + 1,
+        y: entry.count,
+        moreinfo_value: first_date
+      }
+    end
   end
 
   def contractors

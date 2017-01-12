@@ -2,7 +2,7 @@ def update_staff
   staff = Staff.new
 
   # employment
-  send_event('employees', staff.employees)
+  send_event('employees', points: staff.employees)
   send_event('contractors', staff.contractors)
 
   # working hours
