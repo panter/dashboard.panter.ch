@@ -15,7 +15,3 @@ rescue => error
 end
 
 update_salary
-
-SCHEDULER.every '10m' do
-  update_salary
-end

@@ -24,7 +24,3 @@ rescue => error
 end
 
 update_code
-
-SCHEDULER.every '10m' do
-  update_code
-end

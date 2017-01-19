@@ -25,7 +25,3 @@ rescue => error
 end
 
 update_staff
-
-SCHEDULER.every '10m' do
-  update_staff
-end
