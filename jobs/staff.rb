@@ -1,4 +1,6 @@
 def update_staff
+  AppLogger.info 'Starting update_staff...'
+
   staff = Staff.new
 
   # employment
@@ -16,6 +18,10 @@ def update_staff
 
   # children per employee
   send_event('children-per-employee', staff.children_per_employee)
+
+  AppLogger.info 'Finished update_staff'
+rescue => error
+  AppLogger.error "#{error.class} in update_staff: #{error.message}\n#{error.backtrace.join "\n"}"
 end
 
 update_staff

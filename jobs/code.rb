@@ -1,4 +1,6 @@
 def update_code
+  AppLogger.info 'Starting update_code...'
+
   code = Code.new
 
   # commits
@@ -15,6 +17,10 @@ def update_code
 
   # frameworks
   send_event('frameworks', code.frameworks)
+
+  AppLogger.info 'Finished update_code'
+rescue => error
+  AppLogger.error "#{error.class} in update_code: #{error.message}\n#{error.backtrace.join "\n"}"
 end
 
 update_code
