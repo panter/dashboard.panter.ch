@@ -1,5 +1,9 @@
 # Panter Dashboard
 
+## Deprecation Notice
+This is the old dashboard.panter.ch repository and was replaced by
+<https://git.panter.ch/open-source/dashboard.panter.ch/>
+
 ![Screenshot](screenshot.png)
 
 Built with [Dashing](https://shopify.github.io/dashing/).
